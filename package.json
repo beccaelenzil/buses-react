@@ -1,5 +1,6 @@
 {
   "name": "buses-react",
+  "homepage": "https://beccaelenzil.github.io/buses-react",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -20,6 +21,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "predeploy": "npm run build",
+     "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -46,6 +49,8 @@
   "devDependencies": {
     "@iconify/icons-mdi": "^1.2.31",
     "@iconify/react": "^4.0.0",
-    "dotenv": "^16.0.2"
+    "dotenv": "^16.0.2",
+    "gh-pages": "^4.0.0",
+    "netlify-cli": "^12.0.0"
   }
 }
