@@ -18,7 +18,7 @@ const markers = schools.map((school) => {
 function App() {
   return (
     <div style={{ display: "flex", height: "100vh", width: "100vw" }}>
-      <Wrapper apiKey={"AIzaSyD4XxIrCSh0r6B6VKGLwX8EF8v1KfRFPBI"}>
+      <Wrapper apiKey={"GOOGLE-API-KEY"}>
         <Map
           center={center}
           zoom={zoom}
