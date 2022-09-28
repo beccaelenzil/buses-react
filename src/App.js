@@ -3,6 +3,7 @@ import React, {useEffect, useState} from "react";
 import Map from "./components/Map"
 import Marker from "./components/Marker"
 import axios from "axios";
+
 // import schools from "./data/seattle_schools_list.json"
 
 function App() {
@@ -43,7 +44,7 @@ function App() {
 
   return (
     <div style={{ display: "flex", height: "100vh", width: "100vw" }}>
-      <Wrapper apiKey={process.env.NODE_ENV}>
+      <Wrapper apiKey={process.env.REACT_APP_GOOGLE_MAP_KEY}>
         <Map
           center={center}
           zoom={zoom}
