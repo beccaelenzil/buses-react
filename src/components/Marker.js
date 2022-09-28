@@ -17,9 +17,11 @@ const Marker = (options) => {
     }, [marker]);
   
     useEffect(() => {
+      const school_name = toString(options.school)
       if (marker) {
+        
         const infowindow = new window.google.maps.InfoWindow({
-          content: `daver`
+          content: school_name
         });
         marker.setOptions(options);
   
