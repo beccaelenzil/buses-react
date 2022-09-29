@@ -17,7 +17,6 @@ function App() {
   const [time, setTime] = useState("am")
   const [day, setDay] = useState("today")
 
-
   let heading = ''
   if (time == "am" && day == "today"){
     heading = "Today (am)"
@@ -28,7 +27,6 @@ function App() {
   }else if (time == "pm" && day == "historic") {
     heading = "Historic (pm)"
   }
-
 
 
   useEffect(() => {
@@ -50,19 +48,19 @@ function App() {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
-
-  useEffect(() => {
 
   }, []);
+
+  // useEffect(()=>{
+  //   setBuses(buses_to_map)
+  // }, [day, time])
 
   const zoom = 10
   const center = {lat: 47.62, lng: -122.3321} 
   let count = 0
 
   const today = new Date()
-
-
+  
   const months = {
     "January": "1",
     "February": "2",
@@ -82,17 +80,23 @@ const month = String(today.getMonth() + 1)
 const date = String(today.getDate())
 const year = String(today.getFullYear())
 
-const buses_to_map = []
-  for (let bus of buses){
-    if (schools[bus["school"]] && bus["time"] === time){
-      
-      if (day === "today" && bus["day"] === date && months[bus["month"]] === month && bus["year"] === year){
-        buses_to_map.push(bus)
-      } else if (day === "historic") {
-        buses_to_map.push(bus)
+  const buses_to_map = []
+    for (let bus of buses){
+      if (schools[bus["school"]] && bus["time"] === time){
+        let new_bus = {
+          "lat": schools[bus["school"]]["lat"],
+          "lng": schools[bus["school"]]["lng"],
+          "name": bus["school"]
+        }
+        let lng = schools[bus["school"]]["lng"]
+        if (day === "today" && bus["day"] === date && months[bus["month"]] === month && bus["year"] === year){
+          buses_to_map.push(new_bus)
+        } else if (day === "historic") {
+          buses_to_map.push(new_bus)
+        }
       }
     }
-  }
+
 
 
   return (
@@ -109,12 +113,12 @@ const buses_to_map = []
           >
             {buses_to_map.map((bus) => {
               count += 1
-              const school = schools[bus["school"]]
+              console.log(bus)
               return <Marker key={count} 
-              text={school["name"]}
+              popupContent={bus["name"]}
               position={{
-                lat: parseFloat(school["lat"]), 
-                lng: parseFloat(school["lng"])
+                lat: parseFloat(bus["lat"]), 
+                lng: parseFloat(bus["lng"]),
               }}/>;
             })}
           </Map>

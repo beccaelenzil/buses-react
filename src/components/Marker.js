@@ -21,7 +21,7 @@ const Marker = (options) => {
       if (marker) {
         
         const infowindow = new window.google.maps.InfoWindow({
-          content: options.text
+          content: options.popupContent
         });
         marker.setOptions(options);
   
