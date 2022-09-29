@@ -21,7 +21,7 @@ const Marker = (options) => {
       if (marker) {
         
         const infowindow = new window.google.maps.InfoWindow({
-          content: school_name
+          content: options.text
         });
         marker.setOptions(options);
   
