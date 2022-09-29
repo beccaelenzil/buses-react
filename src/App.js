@@ -82,9 +82,7 @@ const month = String(today.getMonth() + 1)
 const date = String(today.getDate())
 const year = String(today.getFullYear())
 
-
-
-  const buses_to_map = []
+const buses_to_map = []
   for (let bus of buses){
     if (schools[bus["school"]] && bus["time"] === time){
       
@@ -101,7 +99,7 @@ const year = String(today.getFullYear())
     
     <div className="App">
       <header id="Title"><h1>Seattle Schools Late Buses</h1><h2>{heading}</h2></header>
-      <NavBar setDay={setDay} setTime={setTime} setBuses/>
+      <NavBar setDay={setDay} setTime={setTime}/>
       <div className="Map" style={{ height: "50vh", width: "50vw" }}>
         <Wrapper apiKey={process.env.REACT_APP_GOOGLE_MAP_KEY}>
           <Map
@@ -109,8 +107,7 @@ const year = String(today.getFullYear())
             zoom={zoom}
             style={{ flexGrow: "1", height: "100%" }}
           >
-            {schools === {} || buses === [] ? <p>Loading</p> :
-            buses_to_map.map((bus) => {
+            {buses_to_map.map((bus) => {
               count += 1
               const school = schools[bus["school"]]
               return <Marker key={count} 
