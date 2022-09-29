@@ -23,9 +23,9 @@ function App() {
     heading = "Today (am)"
   } else if (time == "pm" && day == "today") {
     heading = "Today (pm)"
-  }else if (time == "am" && day == "") {
+  }else if (time == "am" && day == "historic") {
     heading = "Historic (am)"
-  }else if (time == "pm" && day == "") {
+  }else if (time == "pm" && day == "historic") {
     heading = "Historic (pm)"
   }
 
@@ -50,7 +50,7 @@ function App() {
       .catch((err) => {
         console.log(err);
       });
-  }, [day]);
+  }, []);
 
   useEffect(() => {
 
@@ -95,10 +95,6 @@ const year = String(today.getFullYear())
       }
     }
   }
-
-
-
-
 
 
   return (
