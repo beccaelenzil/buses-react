@@ -100,7 +100,7 @@ const year = String(today.getFullYear())
   return (
     
     <div className="App">
-      <header id="Title"><h1>Seattle Schools Late Buses - {heading}</h1></header>
+      <header id="Title"><h1>Seattle Schools Late Buses</h1><h2>{heading}</h2></header>
       <NavBar setDay={setDay} setTime={setTime} setBuses/>
       <div className="Map" style={{ height: "50vh", width: "50vw" }}>
         <Wrapper apiKey={process.env.REACT_APP_GOOGLE_MAP_KEY}>
