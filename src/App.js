@@ -17,7 +17,7 @@ function App() {
   const [time, setTime] = useState("am")
   const [day, setDay] = useState("today")
   const [busesToMap, setBusesToMap] = useState([])
-  const [status, setStatus] = useState("loading")
+  const [showWindow, setShowWindow] = useState(true)
 
   let heading = ''
   if (time == "am" && day == "today"){
@@ -42,7 +42,6 @@ function App() {
         .then((response) => {
           const newBuses = response.data
           setBuses(newBuses);
-          setStatus("loaded")
         })
         .catch((err) => {
           console.log(err);
@@ -83,20 +82,44 @@ function App() {
   const year = String(today.getFullYear())
 
   const newBusesToMap = []
+  const new_buses = {}
   for (let bus of buses){
       count += 1
+      const name = bus["school"]
       if (schools[bus["school"]] && bus["time"] === time){
-        const new_bus = {
-          "lat": schools[bus["school"]]["lat"],
-          "lng": schools[bus["school"]]["lng"],
+        if (day === "historic"){
+          if (name in new_buses){
+            new_buses[name]["duration"] += bus["units"] === "minutes" ? parseInt(bus["duration"]) : 60*parseInt(bus["duration"])
+          } else {
+            new_buses[name] = {
+              "lat": schools[name]["lat"],
+              "lng": schools[name]["lng"],
+              "duration": parseInt(bus["duration"]),
+              "route": "",
+              "units": "minutes",
+            }
+          }
+        } else {
+          new_buses[name] = {
+            "lat": schools[name]["lat"],
+            "lng": schools[name]["lng"],
+            "duration": bus["duration"],
+            "route": bus["route"],
+            "units": bus["units"]
+          }
         }
-        const busInfo = bus["school"] + ": " + [bus["duration"], bus["units"]].join(" ")
-        const marker = <Marker key={count} 
+        const new_bus = new_buses[name]
+        const busInfo = [name, new_bus["route"]].join(" ") + ": " + [new_bus["duration"], new_bus["units"].slice(0,3)].join(" ")
+        console.log(busInfo)
+        const marker = <Marker 
+        showWindow={showWindow} 
+        key={count} 
         popupContent={busInfo}
         position={{
           lat: parseFloat(new_bus["lat"]), 
           lng: parseFloat(new_bus["lng"]),
         }}/>
+        console.log(new_bus)
         if (day === "today" && bus["day"] === date && months[bus["month"]] === month && bus["year"] === year){
           newBusesToMap.push(marker)
         } else if (day === "historic") {
@@ -108,7 +131,9 @@ function App() {
     setBusesToMap(newBusesToMap)
   }
 
-  useEffect(updateBusesToMap, [status, time, day])
+  useEffect(updateBusesToMap, [buses, time, day])
+  useEffect(()=>{setShowWindow(true)}, [time, day])
+
 
 
 
