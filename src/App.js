@@ -17,7 +17,7 @@ function App() {
   const [time, setTime] = useState("am")
   const [day, setDay] = useState("today")
   const [busesToMap, setBusesToMap] = useState([])
-  const [showWindow, setShowWindow] = useState(true)
+  const [busInfoList, setBusInfoList] = useState([])
 
   let heading = ''
   if (time == "am" && day == "today"){
@@ -108,21 +108,22 @@ function App() {
       return newBuses
   }
 
+
   const updateBusesToMap = () => {
       let count = 0
       const newBusesToMap = []
+      const newBusInfoList = []
       const newBuses = filterBuses()
       for (const schoolName in newBuses){
         const newBus = newBuses[schoolName]
         if (newBus){
-        const busInfo = [schoolName, newBus["route"]].join(" ") + ": " + [newBus["duration"], "min"].join(" ")
+        const busInfo = <p>{[schoolName, newBus["route"]].join(" ") + ": " + [newBus["duration"], "min"].join(" ")}</p>
+        newBusInfoList.push(busInfo)
         count += 1
       
         const marker = <Marker 
             time={time}
             day={day}
-            showWindow={showWindow} 
-            setShowWindow={setShowWindow}
             key={count} 
             popupContent={busInfo}
             position={{
@@ -132,7 +133,10 @@ function App() {
             />
         newBusesToMap.push(marker)}
           }
+          
       setBusesToMap(newBusesToMap)
+      setBusInfoList(newBusInfoList)
+
   }
 
   useEffect(updateBusesToMap, [buses, time, day])
@@ -141,6 +145,10 @@ function App() {
     <div className="App">
       <header id="Title"><h1>Seattle Schools Late Buses</h1><h2>{heading}</h2></header>
       <NavBar setDay={setDay} setTime={setTime}/>
+      {busInfoList.length > 0 ?  
+      <div id="busList" className="button3">
+        {busInfoList}
+      </div> : ""}
       <div className="Map" style={{ height: "50vh", width: "50vw" }}>
         <Wrapper apiKey={process.env.REACT_APP_GOOGLE_MAP_KEY}>
           <Map
@@ -152,6 +160,7 @@ function App() {
           </Map>
         </Wrapper>
       </div>
+
       <footer id="Footer"><p>Data Collected from <a href="https://www.seattleschools.org/departments/transportation/latebus/" target="_blank">seattleschools.org</a></p> <p>Created By Becca Elenzil - 2022</p></footer>
     </div>
   );
