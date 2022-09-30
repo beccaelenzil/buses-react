@@ -31,6 +31,8 @@ const Marker = (options) => {
             shouldFocus: false
           });
         });
+
+        setTimeout(function () { infowindow.close(); }, 3000);
       }
     }, [marker, options]);
   
