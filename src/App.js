@@ -12,9 +12,20 @@ function App() {
   URL = "https://seattle-school-buses.herokuapp.com/"
   //URL = "http://127.0.0.1:5000/"
 
+ 
+  const getTime = (hour) => {
+    hour = parseInt(hour)
+    console.log(hour)
+    let timeOfDay = "am"
+    if (hour > 14){
+      timeOfDay = "pm"
+    }
+    return timeOfDay
+  }
+
   const [schools, setSchools] = useState({})
   const [buses, setBuses] = useState([])
-  const [time, setTime] = useState("am")
+  const [time, setTime] = useState(getTime(new Date().getHours()-7))
   const [day, setDay] = useState("today")
   const [busesToMap, setBusesToMap] = useState([])
   const [busInfoList, setBusInfoList] = useState([])
