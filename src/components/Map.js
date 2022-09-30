@@ -15,6 +15,7 @@ const Map = ({ onClick, onIdle, children, style, ...options }) => {
         map.setOptions(options);
       }
     }, [map, options]);
+
   
     useEffect(() => {
       if (map) {

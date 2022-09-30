@@ -58,10 +58,10 @@ function App() {
   const center = {lat: 47.62, lng: -122.3321} 
   
 
-  const updateBusesToMap = () => {
-    let count = 0
+  
+  
+  const filterBuses = () => {
     const today = new Date()
-    
     const months = {
       "January": "1",
       "February": "2",
@@ -77,66 +77,65 @@ function App() {
       "December": "12"
     }
 
-  const month = String(today.getMonth() + 1)
-  const date = String(today.getDate())
-  const year = String(today.getFullYear())
+    const month = String(today.getMonth() + 1)
+    const date = String(today.getDate())
+    const year = String(today.getFullYear())
 
-  const newBusesToMap = []
-  const new_buses = {}
-  for (let bus of buses){
-      count += 1
-      const name = bus["school"]
-      if (schools[bus["school"]] && bus["time"] === time){
-        if (day === "historic"){
-          if (name in new_buses){
-            new_buses[name]["duration"] += bus["units"] === "minutes" ? parseInt(bus["duration"]) : 60*parseInt(bus["duration"])
+
+    const newBuses = {}
+    for (let bus of buses){
+        const schoolName = bus["school"]
+        if (schools[schoolName] && bus["time"] === time && day === "historic"){
+          if (newBuses[schoolName]){
+            newBuses[schoolName]["duration"] += parseInt(bus["duration"])
           } else {
-            new_buses[name] = {
-              "lat": schools[name]["lat"],
-              "lng": schools[name]["lng"],
+            newBuses[schoolName] = {
+              "lat": schools[schoolName]["lat"],
+              "lng": schools[schoolName]["lng"],
               "duration": parseInt(bus["duration"]),
               "route": "",
-              "units": "minutes",
             }
           }
-        } else {
-          new_buses[name] = {
-            "lat": schools[name]["lat"],
-            "lng": schools[name]["lng"],
+        } else if (schools[schoolName] && bus["time"] === time && day === "today" && bus["day"]===date && months[bus["month"]] ===month && bus["year"]===year) { 
+          newBuses[schoolName] = {
+            "lat": schools[schoolName]["lat"],
+            "lng": schools[schoolName]["lng"],
             "duration": bus["duration"],
             "route": bus["route"],
-            "units": bus["units"]
           }
         }
-        const new_bus = new_buses[name]
-        const busInfo = [name, new_bus["route"]].join(" ") + ": " + [new_bus["duration"], new_bus["units"].slice(0,3)].join(" ")
-        console.log(busInfo)
-        const marker = <Marker 
-        showWindow={showWindow} 
-        key={count} 
-        popupContent={busInfo}
-        position={{
-          lat: parseFloat(new_bus["lat"]), 
-          lng: parseFloat(new_bus["lng"]),
-        }}/>
-        console.log(new_bus)
-        if (day === "today" && bus["day"] === date && months[bus["month"]] === month && bus["year"] === year){
-          newBusesToMap.push(marker)
-        } else if (day === "historic") {
-          newBusesToMap.push(marker)
-        }
       }
-    }
-    
-    setBusesToMap(newBusesToMap)
+      return newBuses
+  }
+
+  const updateBusesToMap = () => {
+      let count = 0
+      const newBusesToMap = []
+      const newBuses = filterBuses()
+      for (const schoolName in newBuses){
+        const newBus = newBuses[schoolName]
+        if (newBus){
+        const busInfo = [schoolName, newBus["route"]].join(" ") + ": " + [newBus["duration"], "min"].join(" ")
+        count += 1
+      
+        const marker = <Marker 
+            time={time}
+            day={day}
+            showWindow={showWindow} 
+            setShowWindow={setShowWindow}
+            key={count} 
+            popupContent={busInfo}
+            position={{
+              lat: parseFloat(newBus["lat"]), 
+              lng: parseFloat(newBus["lng"]),
+            }}
+            />
+        newBusesToMap.push(marker)}
+          }
+      setBusesToMap(newBusesToMap)
   }
 
   useEffect(updateBusesToMap, [buses, time, day])
-  useEffect(()=>{setShowWindow(true)}, [time, day])
-
-
-
-
   return (
     
     <div className="App">
