@@ -1,11 +1,11 @@
 .App {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   background: slateblue;
   text-align: center;
   align-items: center;
   /* width: "50vw"; */
 }
-
 
 button {
   margin: 5px;
@@ -75,7 +75,8 @@ button {
   border-radius: 2px;
   padding: 5px;
   background: skyblue;
-  font-size: 0.7em
+  font-size: 0.7em;
+  width: 100%
 }
 
 #NavBar {
@@ -86,6 +87,8 @@ button {
 }
 
 #Footer {
+  margin-top: 2em;
   background: skyblue;
   padding: 5px;
+  width: 100%
 }
