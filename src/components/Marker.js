@@ -23,7 +23,6 @@ const Marker = (options) => {
   
     useEffect(() => {
       if (marker && infowindow) {
-        console.log(options.day)
         marker.setOptions(options);
         
         // marker.addListener("click", () => {
