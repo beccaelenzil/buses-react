@@ -1,8 +1,8 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState, useRef} from "react";
 
 const Map = ({ onClick, onIdle, children, style, ...options }) => {
-    const ref = React.useRef(null);
-    const [map, setMap] = React.useState();
+    const ref = useRef(null);
+    const [map, setMap] = useState();
   
     useEffect(() => {
       if (ref.current && !map) {

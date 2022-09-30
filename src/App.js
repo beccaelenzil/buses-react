@@ -17,6 +17,7 @@ function App() {
   const [time, setTime] = useState("am")
   const [day, setDay] = useState("today")
   const [busesToMap, setBusesToMap] = useState([])
+  const [status, setStatus] = useState("loading")
 
   let heading = ''
   if (time == "am" && day == "today"){
@@ -41,6 +42,7 @@ function App() {
         .then((response) => {
           const newBuses = response.data
           setBuses(newBuses);
+          setStatus("loaded")
         })
         .catch((err) => {
           console.log(err);
@@ -55,9 +57,10 @@ function App() {
 
   const zoom = 10
   const center = {lat: 47.62, lng: -122.3321} 
-  let count = 0
+  
 
   const updateBusesToMap = () => {
+    let count = 0
     const today = new Date()
     
     const months = {
@@ -81,25 +84,31 @@ function App() {
 
   const newBusesToMap = []
   for (let bus of buses){
+      count += 1
       if (schools[bus["school"]] && bus["time"] === time){
-        let new_bus = {
+        const new_bus = {
           "lat": schools[bus["school"]]["lat"],
           "lng": schools[bus["school"]]["lng"],
-          "name": bus["school"]
         }
-        let lng = schools[bus["school"]]["lng"]
+        const busInfo = bus["school"] + ": " + [bus["duration"], bus["units"]].join(" ")
+        const marker = <Marker key={count} 
+        popupContent={busInfo}
+        position={{
+          lat: parseFloat(new_bus["lat"]), 
+          lng: parseFloat(new_bus["lng"]),
+        }}/>
         if (day === "today" && bus["day"] === date && months[bus["month"]] === month && bus["year"] === year){
-          newBusesToMap.push(new_bus)
+          newBusesToMap.push(marker)
         } else if (day === "historic") {
-          newBusesToMap.push(new_bus)
+          newBusesToMap.push(marker)
         }
       }
     }
-    console.log(newBusesToMap)
+    
     setBusesToMap(newBusesToMap)
   }
 
-  useEffect(updateBusesToMap, [buses, time, day])
+  useEffect(updateBusesToMap, [status, time, day])
 
 
 
@@ -115,15 +124,7 @@ function App() {
             zoom={zoom}
             style={{ flexGrow: "1", height: "100%" }}
           >
-            {busesToMap.map((bus) => {
-              count += 1
-              return <Marker key={count} 
-              popupContent={bus["name"]}
-              position={{
-                lat: parseFloat(bus["lat"]), 
-                lng: parseFloat(bus["lng"]),
-              }}/>;
-            })}
+            {busesToMap};
           </Map>
         </Wrapper>
       </div>

@@ -1,8 +1,7 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 
 const Marker = (options) => {
-    const [marker, setMarker] = React.useState();
-    const contentRef = React.useRef(null);
+    const [marker, setMarker] = useState();
   
     useEffect(() => {
       if (!marker) {
@@ -22,7 +21,9 @@ const Marker = (options) => {
         const infowindow = new window.google.maps.InfoWindow({
           content: options.popupContent
         });
+
         marker.setOptions(options);
+        
   
         marker.addListener("click", () => {
           infowindow.open({
