@@ -15,7 +15,6 @@ function App() {
  
   const getTime = (hour) => {
     hour = parseInt(hour)
-    console.log(hour)
     let timeOfDay = "am"
     if (hour > 14){
       timeOfDay = "pm"
@@ -128,10 +127,11 @@ function App() {
       for (const schoolName in newBuses){
         const newBus = newBuses[schoolName]
         if (newBus){
+          count += 1
         const popUp = [schoolName, newBus["route"]].join(" ") + ": " + [newBus["duration"], "min"].join(" ")
-        const busInfo = <p>{popUp}</p>
+        const busInfo = <p key={count}>{popUp}</p>
         newBusInfoList.push(busInfo)
-        count += 1
+       
       
         const marker = <Marker 
             time={time}

@@ -19,19 +19,20 @@ const Marker = (options) => {
     }, [marker]);
 
 
-    useEffect(()=>{infowindow.close();}, [options.time, options.day])
+    useEffect(()=>{infowindow.close();}, [options])
   
     useEffect(() => {
       if (marker && infowindow) {
+        console.log(options.day)
         marker.setOptions(options);
         
-        marker.addListener("click", () => {
-          infowindow.open({
-            anchor: marker,
-            shouldFocus: false
-          });
-          setTimeout(function () { infowindow.close()}, 3000);
-        });
+        // marker.addListener("click", () => {
+        //   infowindow.open({
+        //     anchor: marker,
+        //     shouldFocus: false
+        //   });
+        //   setTimeout(function () { infowindow.close()}, 3000);
+        // });
       }
     }, [marker, options]);
   
