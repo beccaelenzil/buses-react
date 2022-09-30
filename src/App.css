@@ -66,7 +66,8 @@ button {
   margin-right: auto;
   margin-left: auto;
   border: blue;
-  border-radius: 5px
+  border-radius: 5px;
+  overflow: hidden;
 
 }
 
