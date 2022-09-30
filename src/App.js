@@ -152,7 +152,7 @@ function App() {
           </Map>
         </Wrapper>
       </div>
-      <footer id="Footer">Created By Becca Elenzil - 2022</footer>
+      <footer id="Footer">Data Collected from <a href="https://www.seattleschools.org/departments/transportation/latebus/" target="_blank">seattleschools.org</a> - Created By Becca Elenzil - 2022</footer>
     </div>
   );
 }
