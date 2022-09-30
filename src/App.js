@@ -117,7 +117,8 @@ function App() {
       for (const schoolName in newBuses){
         const newBus = newBuses[schoolName]
         if (newBus){
-        const busInfo = <p>{[schoolName, newBus["route"]].join(" ") + ": " + [newBus["duration"], "min"].join(" ")}</p>
+        const popUp = [schoolName, newBus["route"]].join(" ") + ": " + [newBus["duration"], "min"].join(" ")
+        const busInfo = <p>{popUp}</p>
         newBusInfoList.push(busInfo)
         count += 1
       
@@ -125,7 +126,7 @@ function App() {
             time={time}
             day={day}
             key={count} 
-            popupContent={busInfo}
+            popupContent={popUp}
             position={{
               lat: parseFloat(newBus["lat"]), 
               lng: parseFloat(newBus["lng"]),
