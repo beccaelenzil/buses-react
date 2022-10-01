@@ -25,13 +25,17 @@ const Marker = (options) => {
       if (marker && infowindow) {
         marker.setOptions(options);
         
-        // marker.addListener("click", () => {
-        //   infowindow.open({
-        //     anchor: marker,
-        //     shouldFocus: false
-        //   });
-        //   setTimeout(function () { infowindow.close()}, 3000);
-        // });
+        const num = options.popupContent.split(" ").length
+        console.log(num)
+        if (infowindow.content === options.popupContent && options.day === "today"){
+        marker.addListener("click", () => {
+          infowindow.open({
+            anchor: marker,
+            shouldFocus: false
+          });
+          setTimeout(function () { infowindow.close()}, 3000);
+
+        });}
       }
     }, [marker, options]);
   

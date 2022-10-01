@@ -128,7 +128,7 @@ function App() {
         const newBus = newBuses[schoolName]
         if (newBus){
           count += 1
-        const popUp = [schoolName, newBus["route"]].join(" ") + ": " + [newBus["duration"], "min"].join(" ")
+        const popUp = [schoolName, newBus["route"]].join(" ") + " - " + [newBus["duration"], "min"].join(" ")
         const busInfo = <p key={count}>{popUp}</p>
         newBusInfoList.push(busInfo)
        
