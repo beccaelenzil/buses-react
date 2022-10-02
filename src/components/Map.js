@@ -25,12 +25,17 @@ const Map = ({zoomProp, centerProp, busInfoList, day, time}) => {
       zoom: zoom
     });
 
-    console.log(busInfoList)
-
     busInfoList.map((feature) =>
       new mapboxgl.Marker().setLngLat({"lng": feature["lng"], "lat": feature["lat"]}).addTo(map)
+      
     );
-  }, [day, time]);
+
+        // Add navigation control (the +/- zoom buttons)
+        map.addControl(new mapboxgl.NavigationControl(), "top-right");
+
+        // Clean up on unmount
+        return () => map.remove();
+  }, [time, day]);
 
 
   return (

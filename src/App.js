@@ -1,21 +1,15 @@
 import { Wrapper } from "@googlemaps/react-wrapper";
 import React, {useEffect, useState, useRef} from "react";
 import Map from "./components/Map"
-import Pin from "./components/Pin"
 import BusInfo from "./components/BusInfo"
 import NavBar from "./components/NavBar"
 import axios from "axios";
 import "./App.css";
-import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
-import {Marker, Popup} from 'react-map-gl';
- 
-mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN
 
 function App() {
   
-
   const URL = "https://seattle-school-buses.herokuapp.com/"
-  const zoom = 10
+  const zoom = 9.25
   const center = {lat: 47.62, lng: -122.3321} 
  
   const getTime = (hour) => {
@@ -31,9 +25,6 @@ function App() {
   const [buses, setBuses] = useState([])
   const [time, setTime] = useState(getTime(new Date().getHours()-7))
   const [day, setDay] = useState("today")
-  const [busesToMap, setBusesToMap] = useState([])
-  const [busInfoList, setBusInfoList] = useState([])
-  const [popupInfo, setPopupInfo] = useState(null);
 
   let heading = ''
   if (time == "am" && day == "today"){
@@ -90,7 +81,6 @@ function App() {
     const date = String(today.getDate())
     const year = String(today.getFullYear())
 
-
     const newBuses = {}
     for (let bus of buses){
         const schoolName = bus["school"]
@@ -119,7 +109,6 @@ function App() {
 
   const updateBusesToMap = () => {
       let count = 0
-      const newBusesToMap = []
       const newBusInfoList = []
       const newBuses = filterBuses()
       for (const schoolName in newBuses){
@@ -132,34 +121,18 @@ function App() {
             "lng": parseFloat(newBus["lng"]),
             "key": count
           }
-          // const busInfo = <p key={count}>{popUp.text}</p>
           newBusInfoList.push(popUp)
-        
-          const marker = 
-          <Marker 
-            key={count}
-            longitude={parseFloat(newBus["lng"])} 
-            latitude={parseFloat(newBus["lat"])} 
-            anchor="bottom">
-              <div style={{color:"white"}}>You Are Here</div>
-          </Marker>
-
-          newBusesToMap.push(marker)}
+        }
       }
-          
-      setBusesToMap(newBusesToMap)
-      setBusInfoList(newBusInfoList)
-
+      return newBusInfoList
   }
-
-  useEffect(updateBusesToMap, [buses, time, day])
 
   return (
     <div className="App">
       <header id="Title"><h1>Seattle Schools Late Buses</h1><h2>{heading}</h2></header>
       <NavBar setDay={setDay} setTime={setTime}/>
-      {busInfoList.length > 0 ? <BusInfo busInfoList={busInfoList}></BusInfo> : ""}
-      <Map zoomProp={zoom} centerProp={center} busInfoList={busInfoList} day={day} time={time}/>
+      {updateBusesToMap().length > 0 ? <BusInfo busInfoList={updateBusesToMap()}></BusInfo> : ""}
+      <Map zoomProp={zoom} centerProp={center} busInfoList={updateBusesToMap()} day={day} time={time}/>
       <footer id="Footer"><p>Data Collected from <a href="https://www.seattleschools.org/departments/transportation/latebus/" target="_blank">seattleschools.org</a></p> <span style={{display: "block"}}>Created By Becca Elenzil - 2022</span></footer>
     </div>
   );
