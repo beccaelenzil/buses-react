@@ -159,10 +159,7 @@ function App() {
       <header id="Title"><h1>Seattle Schools Late Buses</h1><h2>{heading}</h2></header>
       <NavBar setDay={setDay} setTime={setTime}/>
       {busInfoList.length > 0 ? <BusInfo busInfoList={busInfoList}></BusInfo> : ""}
-      <Map zoomProp={zoom} centerProp={center}>
-          {busesToMap}
-      </Map>
-
+      <Map zoomProp={zoom} centerProp={center} busInfoList={busInfoList} day={day} time={time}/>
       <footer id="Footer"><p>Data Collected from <a href="https://www.seattleschools.org/departments/transportation/latebus/" target="_blank">seattleschools.org</a></p> <span style={{display: "block"}}>Created By Becca Elenzil - 2022</span></footer>
     </div>
   );
