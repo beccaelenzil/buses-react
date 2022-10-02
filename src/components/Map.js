@@ -1,48 +1,32 @@
 import React, {useEffect, useState, useRef} from "react";
+import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
+ 
+mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN
 
-const Map = ({ onClick, onIdle, children, style, ...options }) => {
-    const ref = useRef(null);
-    const [map, setMap] = useState();
-  
-    useEffect(() => {
-      if (ref.current && !map) {
-        setMap(new window.google.maps.Map(ref.current, {}));
-      }
-    }, [ref, map]);
-  
-    useEffect(() => {
-      if (map) {
-        map.setOptions(options);
-      }
-    }, [map, options]);
+const Map = ({zoomProp, centerProp}) => {
 
-  
-    useEffect(() => {
-      if (map) {
-        ["click", "idle"].forEach((eventName) =>
-          window.google.maps.event.clearListeners(map, eventName)
-        );
-  
-        if (onClick) {
-          map.addListener("click", onClick);
-        }
-  
-        if (onIdle) {
-          map.addListener("idle", () => onIdle(map));
-        }
-      }
-    }, [map, onClick, onIdle]);
-  
-    return (
-      <>
-        <div ref={ref} style={style} />
-        {React.Children.map(children, (child) => {
-          if (React.isValidElement(child)) {
-            return React.cloneElement(child, { map });
-          }
-        })}
-      </>
+  const mapContainer = useRef(null);
+  const map = useRef(null);
+  const [lng, setLng] = useState(centerProp["lng"]);
+  const [lat, setLat] = useState(centerProp["lat"]);
+  const [zoom, setZoom] = useState(zoomProp);
+
+
+  useEffect(() => {
+    if (map.current) return; // initialize map only once
+    map.current = new mapboxgl.Map({
+      container: mapContainer.current,
+      style: 'mapbox://styles/mapbox/streets-v11',
+      center: [lng, lat],
+      zoom: zoom
+    });
+  });
+
+  return (
+        <div ref={mapContainer} className="map-container" />
     );
-  };
+  }
+
+
 
   export default Map;
