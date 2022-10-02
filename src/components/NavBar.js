@@ -1,5 +1,6 @@
 import React from "react";
 import "./NavBar.css"
+import "./ButtonStyle.css"
 
 function NavBar({setDay, setTime}) {
 

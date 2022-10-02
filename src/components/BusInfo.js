@@ -1,5 +1,6 @@
 import React from "react";
 import "./BusInfo.css"
+import "./ButtonStyle.css"
 
 const BusInfo = ({busInfoList}) => {
     return(
