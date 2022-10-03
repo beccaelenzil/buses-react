@@ -86,22 +86,22 @@ function App() {
         const schoolName = bus["school"]
         if (schools[schoolName] && bus["time"] === time && day === "historic"){
           if (newBuses[schoolName]){
-            newBuses[schoolName]["duration"] += ", "+bus["duration"]
+            newBuses[schoolName]["duration"] += ", "+bus["duration"]+" "+bus["units"]
           } else {
             newBuses[schoolName] = {
               "lat": schools[schoolName]["lat"],
               "lng": schools[schoolName]["lng"],
-              "duration": bus["duration"],
+              "duration": bus["duration"]+" "+bus["units"],
               "route": "",
             }
           }
         } else if (schools[schoolName] && bus["time"] === time && day === "today" && bus["day"]===date && months[bus["month"]] ===month && bus["year"]===year) { 
-          newBuses[schoolName] = {
+          newBuses[schoolName + " " + bus["route"]] = {
             "lat": schools[schoolName]["lat"],
             "lng": schools[schoolName]["lng"],
-            "duration": bus["duration"],
+            "duration": bus["duration"]+" "+bus["units"],
             "route": bus["route"],
-          }
+          } 
         }
       }
       return newBuses
@@ -116,7 +116,7 @@ function App() {
           if (newBus){
             count += 1
           const popUp = {
-            "text": [schoolName, newBus["route"]].join(" ") + " - " + [newBus["duration"], "min"].join(" "),
+            "text": schoolName + " - " + newBus["duration"],
             "lat": parseFloat(newBus["lat"]),
             "lng": parseFloat(newBus["lng"]),
             "key": count
