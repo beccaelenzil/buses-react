@@ -1,6 +1,6 @@
-.map-container {
-    height: 50vh;
-    width: 50vw;
-    border-radius: 10px;
-    overflow: hidden;
-  }
+#map-container {
+  height: 50vh;
+  width: 50vw;
+  border-radius: 10px;
+  overflow: hidden;
+}

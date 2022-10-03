@@ -25,6 +25,7 @@ function App() {
   const [buses, setBuses] = useState([])
   const [time, setTime] = useState(getTime(new Date().getHours()-7))
   const [day, setDay] = useState("today")
+  const [mapBuses, setMapBuses] = useState([])
 
   let heading = ''
   if (time == "am" && day == "today"){
@@ -49,7 +50,7 @@ function App() {
         .then((response) => {
           const newBuses = response.data
           setBuses(newBuses);
-        })
+        }).then()
         .catch((err) => {
           console.log(err);
         });
@@ -57,7 +58,6 @@ function App() {
       .catch((err) => {
         console.log(err);
       });
-
   }, []);
 
   const filterBuses = () => {
@@ -124,15 +124,20 @@ function App() {
           newBusInfoList.push(popUp)
         }
       }
-      return newBusInfoList
+      return setMapBuses(newBusInfoList)
   }
+
+  useEffect(updateBusesToMap, [buses, day, time])
+
+
 
   return (
     <div className="App">
       <header id="Title"><h1>Seattle Schools Late Buses</h1><h2>{heading}</h2></header>
       <NavBar setDay={setDay} setTime={setTime}/>
-      {updateBusesToMap().length > 0 ? <BusInfo busInfoList={updateBusesToMap()}></BusInfo> : ""}
-      <Map zoomProp={zoom} centerProp={center} busInfoList={updateBusesToMap()} day={day} time={time}/>
+      {console.log(mapBuses[0])}
+      {mapBuses.length > 0 ? <BusInfo busInfoList={mapBuses}></BusInfo> : ""}
+      <Map zoomProp={zoom} centerProp={center} busInfoList={mapBuses} day={day} time={time}/>
       <footer id="Footer"><p>Data Collected from <a href="https://www.seattleschools.org/departments/transportation/latebus/" target="_blank">seattleschools.org</a></p> <span style={{display: "block"}}>Created By Becca Elenzil - 2022</span></footer>
     </div>
   );
