@@ -26,6 +26,7 @@ function App() {
   const [time, setTime] = useState(getTime(new Date().getHours()-7))
   const [day, setDay] = useState("today")
   const [mapBuses, setMapBuses] = useState([])
+  const [markerList, setMarkerList] = useState([])
 
   let heading = ''
   if (time == "am" && day == "today"){
@@ -84,21 +85,24 @@ function App() {
     const newBuses = {}
     for (let bus of buses){
         const schoolName = bus["school"]
-        if (schools[schoolName] && bus["time"] === time && day === "historic"){
+        const lat = schools[schoolName] ? schools[schoolName]["lat"] : null
+        const lng = schools[schoolName] ? schools[schoolName]["lng"] : null
+        if (bus["time"] === time && day === "historic"){
           if (newBuses[schoolName]){
             newBuses[schoolName]["duration"] += ", "+bus["duration"]+" "+bus["units"]
           } else {
+            
             newBuses[schoolName] = {
-              "lat": schools[schoolName]["lat"],
-              "lng": schools[schoolName]["lng"],
+              "lat": lat,
+              "lng": lng,
               "duration": bus["duration"]+" "+bus["units"],
               "route": "",
             }
           }
-        } else if (schools[schoolName] && bus["time"] === time && day === "today" && bus["day"]===date && months[bus["month"]] ===month && bus["year"]===year) { 
+        } else if (bus["time"] === time && day === "today" && bus["day"]===date && months[bus["month"]] ===month && bus["year"]===year) { 
           newBuses[schoolName + " " + bus["route"]] = {
-            "lat": schools[schoolName]["lat"],
-            "lng": schools[schoolName]["lng"],
+            "lat": lat,
+            "lng": lng,
             "duration": bus["duration"]+" "+bus["units"],
             "route": bus["route"],
           } 
@@ -110,21 +114,32 @@ function App() {
   const updateBusesToMap = () => {
       let count = 0
       const newBusInfoList = []
+      const newMarkerList = []
       const newBuses = filterBuses()
       for (const schoolName in newBuses){
           const newBus = newBuses[schoolName]
           if (newBus){
             count += 1
-          const popUp = {
-            "text": schoolName + " - " + newBus["duration"],
-            "lat": parseFloat(newBus["lat"]),
-            "lng": parseFloat(newBus["lng"]),
-            "key": count
-          }
-          newBusInfoList.push(popUp)
+            console.log(schoolName)
+            if (newBus["lat"] && newBus["lng"]){
+              const marker = {
+                "text": schoolName + " - " + newBus["duration"],
+                "lat": parseFloat(newBus["lat"]),
+                "lng": parseFloat(newBus["lng"]),
+                "key": count
+              }
+              newMarkerList.push(marker)
+            }
+            const popup = {
+              "text": schoolName + " - " + newBus["duration"],
+              "key": count
+            }
+          newBusInfoList.push(popup)
+
         }
       }
-      return setMapBuses(newBusInfoList)
+      setMapBuses(newBusInfoList)
+      setMarkerList(newMarkerList)
   }
 
   useEffect(updateBusesToMap, [buses, day, time])
@@ -135,9 +150,8 @@ function App() {
     <div className="App">
       <header id="Title"><h1>Seattle Schools Late Buses</h1><h2>{heading}</h2></header>
       <NavBar setDay={setDay} setTime={setTime}/>
-      {console.log(mapBuses[0])}
       {mapBuses.length > 0 ? <BusInfo busInfoList={mapBuses}></BusInfo> : ""}
-      <Map zoomProp={zoom} centerProp={center} busInfoList={mapBuses} day={day} time={time}/>
+      <Map zoomProp={zoom} centerProp={center} busInfoList={markerList} day={day} time={time}/>
       <footer id="Footer"><p>Data Collected from <a href="https://www.seattleschools.org/departments/transportation/latebus/" target="_blank">seattleschools.org</a></p> <span style={{display: "block"}}>Created By Becca Elenzil - 2022</span></footer>
     </div>
   );
