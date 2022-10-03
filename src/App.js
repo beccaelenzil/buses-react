@@ -25,7 +25,7 @@ function App() {
   const [buses, setBuses] = useState([])
   const [time, setTime] = useState(getTime(new Date().getHours()-7))
   const [day, setDay] = useState("today")
-  const [mapBuses, setMapBuses] = useState([])
+  const [infoList, setInfoList] = useState([])
   const [markerList, setMarkerList] = useState([])
 
   let heading = ''
@@ -38,7 +38,6 @@ function App() {
   }else if (time == "pm" && day == "historic") {
     heading = "Historic (pm)"
   }
-
 
   useEffect(() => {
     axios
@@ -64,18 +63,18 @@ function App() {
   const filterBuses = () => {
     const today = new Date()
     const months = {
-      "January": "1",
-      "February": "2",
-      "March": "3",
-      "April": "4",
-      "May": "5",
-      "June": "6",
-      "July": "7",
-      "August": "8",
-      "September": "9",
-      "October": "10",
-      "November": "11",
-      "December": "12"
+      January: "1",
+      February: "2",
+      March: "3",
+      April: "4",
+      May: "5",
+      June: "6",
+      July: "7",
+      August: "8",
+      September: "9",
+      October: "10",
+      November: "11",
+      December: "12"
     }
 
     const month = String(today.getMonth() + 1)
@@ -91,20 +90,17 @@ function App() {
           if (newBuses[schoolName]){
             newBuses[schoolName]["duration"] += ", "+bus["duration"]+" "+bus["units"]
           } else {
-            
             newBuses[schoolName] = {
-              "lat": lat,
-              "lng": lng,
-              "duration": bus["duration"]+" "+bus["units"],
-              "route": "",
+              lat: lat,
+              lng: lng,
+              duration: bus["duration"]+" "+bus["units"],
             }
           }
         } else if (bus["time"] === time && day === "today" && bus["day"]===date && months[bus["month"]] ===month && bus["year"]===year) { 
           newBuses[schoolName + " " + bus["route"]] = {
-            "lat": lat,
-            "lng": lng,
-            "duration": bus["duration"]+" "+bus["units"],
-            "route": bus["route"],
+            lat: lat,
+            lng: lng,
+            duration: bus["duration"]+" "+bus["units"],
           } 
         }
       }
@@ -123,35 +119,33 @@ function App() {
             console.log(schoolName)
             if (newBus["lat"] && newBus["lng"]){
               const marker = {
-                "text": schoolName + " - " + newBus["duration"],
-                "lat": parseFloat(newBus["lat"]),
-                "lng": parseFloat(newBus["lng"]),
-                "key": count
+                text: schoolName + " - " + newBus["duration"],
+                lat: parseFloat(newBus["lat"]),
+                lng: parseFloat(newBus["lng"]),
+                key: count
               }
               newMarkerList.push(marker)
             }
             const popup = {
-              "text": schoolName + " - " + newBus["duration"],
-              "key": count
+              text: schoolName + " - " + newBus["duration"],
+              key: count
             }
           newBusInfoList.push(popup)
 
         }
       }
-      setMapBuses(newBusInfoList)
+      setInfoList(newBusInfoList)
       setMarkerList(newMarkerList)
   }
 
   useEffect(updateBusesToMap, [buses, day, time])
 
-
-
   return (
     <div className="App">
       <header id="Title"><h1>Seattle Schools Late Buses</h1><h2>{heading}</h2></header>
       <NavBar setDay={setDay} setTime={setTime}/>
-      {mapBuses.length > 0 ? <BusInfo busInfoList={mapBuses}></BusInfo> : ""}
-      <Map zoomProp={zoom} centerProp={center} busInfoList={markerList} day={day} time={time}/>
+      {infoList.length > 0 ? <BusInfo busInfoList={infoList}></BusInfo> : ""}
+      <Map zoomProp={zoom} centerProp={center} markerList={markerList}/>
       <footer id="Footer"><p>Data Collected from <a href="https://www.seattleschools.org/departments/transportation/latebus/" target="_blank">seattleschools.org</a></p> <span style={{display: "block"}}>Created By Becca Elenzil - 2022</span></footer>
     </div>
   );

@@ -4,20 +4,16 @@ import "./Map.css"
  
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN
 
-const Map = ({zoomProp, centerProp, busInfoList, day, time}) => {
+const Map = ({zoomProp, centerProp, markerList}) => {
 
   const mapContainer = useRef(null);
-  //const map = useRef(null);
   const [lng, setLng] = useState(centerProp["lng"]);
   const [lat, setLat] = useState(centerProp["lat"]);
   const [zoom, setZoom] = useState(zoomProp);
 
 
   useEffect(() => {
-    // if (!map) {
-    //   return
-    // }; // initialize map only once
-    
+
     const map = new mapboxgl.Map({
       container: mapContainer.current,
       style: 'mapbox://styles/mapbox/streets-v11',
@@ -25,16 +21,16 @@ const Map = ({zoomProp, centerProp, busInfoList, day, time}) => {
       zoom: zoom
     });
 
-    busInfoList.map((feature) =>
+    markerList.map((feature) =>
       new mapboxgl.Marker().setLngLat({"lng": feature["lng"], "lat": feature["lat"]}).addTo(map)
     );
 
-        // Add navigation control (the +/- zoom buttons)
-        map.addControl(new mapboxgl.NavigationControl(), "top-right");
+    // Add navigation control (the +/- zoom buttons)
+    map.addControl(new mapboxgl.NavigationControl(), "top-right");
 
-        // Clean up on unmount
-        return () => map.remove();
-  }, [busInfoList]);
+    // Clean up on unmount
+    return () => map.remove();
+  }, [markerList]);
 
 
   return (
