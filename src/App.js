@@ -36,9 +36,9 @@ function App() {
   } else if (time == "pm" && day == "today") {
     heading = "Today (pm)"
   }else if (time == "am" && day == "historic") {
-    heading = "Historic Average (am)"
+    heading = "Historic Average (number of buses) (am)"
   }else if (time == "pm" && day == "historic") {
-    heading = "Historic Average (pm)"
+    heading = "Historic Average (number of buses) (pm)"
   }
 
   useEffect(() => {
@@ -133,7 +133,7 @@ function App() {
               newMarkerList.push(marker)
             }
             const n = newBus["duration"].length
-            const duration = day == "historic" ? parseInt(average(newBus["duration"])) + " mins - " + n+ " buses" : newBus["duration"][0] + " mins" 
+            const duration = day == "historic" ? parseInt(average(newBus["duration"])) + " mins - (" + n+ ")" : newBus["duration"][0] + " mins" 
             const popup = {
               text: schoolName + " - " + duration,
               key: count
