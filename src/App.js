@@ -6,6 +6,7 @@ import NavBar from "./components/NavBar"
 import axios from "axios";
 import "./App.css";
 
+
 function App() {
   
   const URL = "https://seattle-school-buses.herokuapp.com/"
@@ -20,6 +21,7 @@ function App() {
     }
     return timeOfDay
   }
+  const average = array => array.reduce((a, b) => a + b) / array.length;
 
   const [schools, setSchools] = useState({})
   const [buses, setBuses] = useState([])
@@ -34,9 +36,9 @@ function App() {
   } else if (time == "pm" && day == "today") {
     heading = "Today (pm)"
   }else if (time == "am" && day == "historic") {
-    heading = "Historic (am)"
+    heading = "Historic Average (am)"
   }else if (time == "pm" && day == "historic") {
-    heading = "Historic (pm)"
+    heading = "Historic Average (pm)"
   }
 
   useEffect(() => {
@@ -86,21 +88,25 @@ function App() {
         const schoolName = bus["school"]
         const lat = schools[schoolName] ? schools[schoolName]["lat"] : null
         const lng = schools[schoolName] ? schools[schoolName]["lng"] : null
+        const duration = bus["units"] == "hours" || bus["units"] == "hour"? parseInt(bus["duration"])*60 : parseInt(bus["duration"])
         if (bus["time"] === time && day === "historic"){
+          
           if (newBuses[schoolName]){
-            newBuses[schoolName]["duration"] += ", "+bus["duration"]+" "+bus["units"]
+            newBuses[schoolName]["duration"].push(duration)
+            //newBuses[schoolName]["duration"] += ", "+bus["duration"]+" "+bus["units"]
           } else {
+            
             newBuses[schoolName] = {
               lat: lat,
               lng: lng,
-              duration: bus["duration"]+" "+bus["units"],
+              duration: [duration]
             }
           }
         } else if (bus["time"] === time && day === "today" && bus["day"]===date && months[bus["month"]] ===month && bus["year"]===year) { 
           newBuses[schoolName + " " + bus["route"]] = {
             lat: lat,
             lng: lng,
-            duration: bus["duration"]+" "+bus["units"],
+            duration: [duration],
           } 
         }
       }
@@ -126,8 +132,10 @@ function App() {
               }
               newMarkerList.push(marker)
             }
+            const n = newBus["duration"].length
+            const duration = day == "historic" ? parseInt(average(newBus["duration"])) + " mins - " + n+ " buses" : newBus["duration"][0] + " mins" 
             const popup = {
-              text: schoolName + " - " + newBus["duration"],
+              text: schoolName + " - " + duration,
               key: count
             }
           newBusInfoList.push(popup)
