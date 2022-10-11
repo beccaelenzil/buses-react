@@ -113,6 +113,31 @@ function App() {
       return newBuses
   }
 
+  const sortInfo = (busInfo) => {
+    let sortBy = "n"
+    if (day == "today"){
+      sortBy = "todaysDuration"
+    }
+    else if (day === "historic") {
+      sortBy = "n"
+    }
+    for(let i = 0; i < busInfo.length; i++){
+        // Last i elements are already in place 
+        for(let j = 0; j < ( busInfo.length - i -1 ); j++){           
+          // Checking if the item at present iteration
+          // is greater than the next iteration
+          if(busInfo[j][sortBy] < busInfo[j+1][sortBy]){
+            // If the condition is true then swap them
+            var temp = busInfo[j]
+            busInfo[j] = busInfo[j + 1]
+            busInfo[j+1] = temp
+          }
+        }
+      }
+      return busInfo
+     }
+     
+
   const updateBusesToMap = () => {
       let count = 0
       const newBusInfoList = []
@@ -136,15 +161,18 @@ function App() {
             const duration = day == "historic" ? parseInt(average(newBus["duration"])) + " mins - (" + n+ ")" : newBus["duration"][0] + " mins" 
             const popup = {
               text: schoolName + " - " + duration,
-              key: count
+              key: count,
+              n: n,
+             todaysDuration: newBus["duration"][0]
             }
           newBusInfoList.push(popup)
 
         }
       }
-      setInfoList(newBusInfoList)
+      setInfoList(sortInfo(newBusInfoList))
       setMarkerList(newMarkerList)
   }
+
 
   useEffect(updateBusesToMap, [buses, day, time])
 
