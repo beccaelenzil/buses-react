@@ -6,6 +6,7 @@ I was inspired to work on this project by the understanding that student achieve
 In this project my software builds a database of daily late buses with key information such as school, route, date, and minutes late. This information is available publicly on a per-day basis, but no historical database or public APIs exist. My project uses a Flask app to scrape the Seattle Schools webpage, parse it using regex, and post the data to PostgresQL. The post request is triggered from a cron job on BEEW.io and the back-end service is deployed to Heroku. The front-end web application is React with MapBoxGL and is deployed to GitHub pages.
 
 Here is a link to the Flask API repo: [https://github.com/beccaelenzil/seattle-late-schools-buses](https://github.com/beccaelenzil/seattle-late-schools-buses)
+
 The deployed React Web Application can be viewed here: [https://beccaelenzil.github.io/buses-react/](https://beccaelenzil.github.io/buses-react/)
 
 ### `npm start`
