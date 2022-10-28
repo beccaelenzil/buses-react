@@ -11,7 +11,6 @@ const Map = ({zoomProp, centerProp, markerList}) => {
   const [lat, setLat] = useState(centerProp["lat"]);
   const [zoom, setZoom] = useState(zoomProp);
 
-
   useEffect(() => {
 
     const map = new mapboxgl.Map({
@@ -22,7 +21,7 @@ const Map = ({zoomProp, centerProp, markerList}) => {
     });
 
     markerList.map((feature) =>
-      new mapboxgl.Marker().setLngLat({"lng": feature["lng"], "lat": feature["lat"]}).addTo(map)
+      new mapboxgl.Marker().setPopup(new mapboxgl.Popup().setHTML(feature["text"])).setLngLat({"lng": feature["lng"], "lat": feature["lat"]}).addTo(map)
     );
 
     // Add navigation control (the +/- zoom buttons)
@@ -37,7 +36,5 @@ const Map = ({zoomProp, centerProp, markerList}) => {
         <div ref={mapContainer} id="map-container" />
     );
   }
-
-
 
   export default Map;
