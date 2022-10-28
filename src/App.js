@@ -147,18 +147,18 @@ function App() {
           const newBus = newBuses[schoolName]
           if (newBus){
             count += 1
-            console.log(schoolName)
+            const n = newBus["duration"].length
+            const duration = day == "historic" ? parseInt(average(newBus["duration"])) + " mins - (" + n+ ")" : newBus["duration"][0] + " mins" 
             if (newBus["lat"] && newBus["lng"]){
               const marker = {
-                text: schoolName + " - " + newBus["duration"],
+                text: schoolName + " - " + duration,
                 lat: parseFloat(newBus["lat"]),
                 lng: parseFloat(newBus["lng"]),
                 key: count
               }
               newMarkerList.push(marker)
             }
-            const n = newBus["duration"].length
-            const duration = day == "historic" ? parseInt(average(newBus["duration"])) + " mins - (" + n+ ")" : newBus["duration"][0] + " mins" 
+            
             const popup = {
               text: schoolName + " - " + duration,
               key: count,
