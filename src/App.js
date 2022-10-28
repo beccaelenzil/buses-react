@@ -1,4 +1,3 @@
-import { Wrapper } from "@googlemaps/react-wrapper";
 import React, {useEffect, useState, useRef} from "react";
 import Map from "./components/Map"
 import BusInfo from "./components/BusInfo"
@@ -113,6 +112,7 @@ function App() {
       return newBuses
   }
 
+  //bubble sort to practice bubble sort
   const sortInfo = (busInfo) => {
     let sortBy = "n"
     if (day == "today"){
@@ -137,7 +137,6 @@ function App() {
       return busInfo
      }
      
-
   const updateBusesToMap = () => {
       let count = 0
       const newBusInfoList = []
@@ -173,7 +172,6 @@ function App() {
       setMarkerList(newMarkerList)
   }
 
-
   useEffect(updateBusesToMap, [buses, day, time])
 
   return (
@@ -185,7 +183,6 @@ function App() {
       <footer id="Footer"><p>Data Collected from <a href="https://www.seattleschools.org/departments/transportation/latebus/" target="_blank">seattleschools.org</a></p> <span style={{display: "block"}}>Created By Becca Elenzil - 2022</span></footer>
     </div>
   );
-
 }
 
 export default App;
