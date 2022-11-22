@@ -115,6 +115,7 @@ function App() {
   }
 
   //bubble sort to practice bubble sort
+  //TODO: update to use built in sort
   const sortInfo = (busInfo) => {
     let sortBy = "n"
     if (day == "today"){
