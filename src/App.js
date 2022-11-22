@@ -46,6 +46,7 @@ function App() {
       .then((response) => {
         const newSchools = response.data
         setSchools(newSchools);
+        // TODO: remove chained API call
         axios
         .get(URL+"buses")
         .then((response) => {
@@ -61,6 +62,7 @@ function App() {
       });
   }, []);
 
+  //TODO: update logic to use school_id foreign key in buses response. Some of this logic is duplicated in the API code
   const filterBuses = () => {
     const today = new Date()
     const months = {
