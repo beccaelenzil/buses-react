@@ -2,25 +2,10 @@ import React, {useEffect, useState, useRef, createRef} from "react";
 import ReactDOM from "react-dom";
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import "./Map.css"
+import Marker from "./Marker.js"
  
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN
 
-const Marker = ({ onClick, children, feature }) => {
-  const _onClick = () => {
-    onClick(feature["text"]);
-  };
-
-  let className = "marker "
-  className += feature["duration"] + " "
-  className += feature["time"]
-  console.log(className)
-
-  return (
-    <button onClick={_onClick} className={className}>
-      {children}
-    </button>
-  );
-};
 
 const Map = ({zoomProp, centerProp, markerList, amPm}) => {
 
