@@ -139,6 +139,7 @@ function App() {
       }
       return busInfo
      }
+
      
   const updateBusesToMap = () => {
       let count = 0
@@ -150,13 +151,19 @@ function App() {
           if (newBus){
             count += 1
             const n = newBus["duration"].length
-            const duration = day == "historic" ? parseInt(average(newBus["duration"])) + " mins - (" + n+ ")" : newBus["duration"][0] + " mins" 
+            const duration_time = day == "historic" ? parseInt(average(newBus["duration"])) : newBus["duration"][0]
+            const duration = day == "historic" ? duration_time + " mins - (" + n+ ")" : duration_time + " mins" 
             if (newBus["lat"] && newBus["lng"]){
               const marker = {
                 text: schoolName + " - " + duration,
                 lat: parseFloat(newBus["lat"]),
                 lng: parseFloat(newBus["lng"]),
-                key: count
+                key: count,
+                duration: duration_time,
+                time: time,
+                n: n,
+                day: day,
+
               }
               newMarkerList.push(marker)
             }

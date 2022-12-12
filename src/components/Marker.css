@@ -1,0 +1,41 @@
+
+.am{
+    background-color: #3366ff;
+    border: 1px solid lightblue
+  }
+  
+  .pm{
+    background-color: #cc3300;
+    border: 1px solid lightblue
+  }
+
+.marker {
+    padding: 0.6em;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    border-radius: 50%;
+  }
+  
+  .xs {
+    padding: 0.2em;
+  }
+
+  .small {
+    padding: 0.35em;
+  }
+  
+  .med {
+    padding: 0.5em;
+  }
+  
+  .large {
+    padding: 0.65em;
+  }
+  
+  .xl {
+    padding: 0.8em;
+  }
+  
