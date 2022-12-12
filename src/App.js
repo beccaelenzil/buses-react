@@ -156,7 +156,10 @@ function App() {
                 text: schoolName + " - " + duration,
                 lat: parseFloat(newBus["lat"]),
                 lng: parseFloat(newBus["lng"]),
-                key: count
+                key: count,
+                duration: duration,
+                time: time
+
               }
               newMarkerList.push(marker)
             }
